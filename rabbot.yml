@@ -3,11 +3,18 @@ resources:
   type: time
   source: {interval: 1m}
 
+- name: github-code
+  type: git
+  source:
+    uri: https://github.com/vlad-stoian/rabbot.git
+    branch: master
+
 jobs:
 - name: navi
   plan:
   - get: every-1m
     trigger: true
+  - get: github-code
   - task: annoy
     config:
       platform: linux
@@ -19,5 +26,5 @@ jobs:
       run:
         path: python
         args:
-        - "-V"
+        - "github-code/src/check-it.py"
 
