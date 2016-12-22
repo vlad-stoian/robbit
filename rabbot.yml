@@ -23,8 +23,13 @@ jobs:
         source:
           repository: python
           tag: alpine
+      inputs:
+      - name: github-code
       run:
         path: python
         args:
         - "github-code/src/check-it.py"
+        - {{slack-token}}
+        - {{postfacto-token}}
+        - {{retro-id}}
 
