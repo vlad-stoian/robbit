@@ -29,7 +29,7 @@ sorted_action_items = sorted([item for item in action_items if not item["done"]]
 good_morning = ["*Good morning, fellow rabbits*:rabbit2:",]
 retro_items = ["Retro items:", "```"] + [item["description"] for item in sorted_action_items] + ["```"]
 
-message = "\n".join(good_morning + retro_items) 
+message = "\n".join(good_morning + retro_items)
 print(message)
 
 

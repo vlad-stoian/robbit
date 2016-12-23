@@ -1,7 +1,15 @@
 resources:
-- name: every-1m
+- name: every-morning
   type: time
-  source: {interval: 1m}
+  source:
+    start: 9:30 AM
+    stop: 9:45 AM
+    days:
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
 
 - name: github-code
   type: git
@@ -10,9 +18,9 @@ resources:
     branch: master
 
 jobs:
-- name: navi
+- name: post-retro-items
   plan:
-  - get: every-1m
+  - get: every-morning
     trigger: true
   - get: github-code
   - task: annoy
@@ -32,5 +40,5 @@ jobs:
         - {{retro-id}}
         - {{postfacto-token}}
         - {{slack-token}}
-        - {{slack-channgel}}
+        - {{slack-channel}}
 
