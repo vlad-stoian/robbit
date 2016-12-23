@@ -29,7 +29,8 @@ jobs:
         path: python
         args:
         - "github-code/src/check-it.py"
-        - {{slack-token}}
-        - {{postfacto-token}}
         - {{retro-id}}
+        - {{postfacto-token}}
+        - {{slack-token}}
+        - {{slack-channgel}}
 
