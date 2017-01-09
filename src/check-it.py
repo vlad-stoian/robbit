@@ -28,7 +28,7 @@ sorted_action_items = sorted([item for item in action_items if not item["done"]]
 
 good_morning_message = ["*Good morning, fellow rabbits*:rabbit2:",]
 retro_items = [item["description"] for item in sorted_action_items]
-retro_items_count = len(retro_items_message)
+retro_items_count = len(retro_items)
 full_message = [good_morning_message, "(%s) Retro items:" % retro_items_count, "```"] + retro_items + ["```"]
 
 message = "\n".join(full_message)
