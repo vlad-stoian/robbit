@@ -22,14 +22,16 @@ url = 'https://retro-api.cfapps.io/retros/' + retro_id
 request = urllib.request.Request(url, headers=headers)
 response = urllib.request.urlopen(request)
 
-retro = json.loads(response.read().decode('utf-8'))
-action_items = retro["retro"]["action_items"]
+retro = json.loads(response.read().decode('utf-8'))["retro"]
+action_items = retro["action_items"]
 sorted_action_items = sorted([item for item in action_items if not item["done"]], key=lambda x: x["created_at"])
 
-good_morning = ["*Good morning, fellow rabbits*:rabbit2:",]
-retro_items = ["Retro items:", "```"] + [item["description"] for item in sorted_action_items] + ["```"]
+good_morning_message = ["*Good morning, fellow rabbits*:rabbit2:",]
+retro_items = [item["description"] for item in sorted_action_items]
+retro_items_count = len(retro_items_message)
+full_message = [good_morning_message, "(%s) Retro items:" % retro_items_count, "```"] + retro_items + ["```"]
 
-message = "\n".join(good_morning + retro_items)
+message = "\n".join(full_message)
 print(message)
 
 

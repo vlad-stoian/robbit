@@ -14,7 +14,7 @@ resources:
 - name: github-code
   type: git
   source:
-    uri: https://github.com/vlad-stoian/rabbot.git
+    uri: https://github.com/vlad-stoian/robbit.git
     branch: master
 
 jobs:
