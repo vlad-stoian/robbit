@@ -37,8 +37,8 @@ jobs:
         path: python
         args:
         - "github-code/src/check-it.py"
-        - {{retro-id}}
         - {{postfacto-token}}
+        - {{retro-id}}
         - {{slack-token}}
         - {{slack-channel}}
 

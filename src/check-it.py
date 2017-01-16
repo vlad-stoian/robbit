@@ -5,12 +5,13 @@ import json
 
 print("Hello There!")
 
-script_path, retro_id, postfacto_token, slack_token, slack_channel = sys.argv
+script_path, postfacto_token, retro_id, slack_token, slack_channel = sys.argv
 
 print("<debug>")
-print(slack_token)
-print(postfacto_token)
-print(retro_id)
+print("postfacto_token = ", postfacto_token)
+print("retro_id = ", retro_id)
+print("slack_token = ", slack_token)
+print("slack_channel = ", slack_channel)
 print("</debug>")
 
 headers = {
@@ -51,3 +52,9 @@ slack_data = {
 
 urllib.request.urlopen(slack_url, data=urllib.parse.urlencode(slack_data).encode('utf-8'))
 
+
+tracker_reminder_message=["*Also, don't forget to update <https://www.pivotaltracker.com/dashboard|Pivotal Tracker>*"]
+
+slack_data["text"] = "\n".join(tracker_reminder_message)
+
+urllib.request.urlopen(slack_url, data=urllib.parse.urlencode(slack_data).encode('utf-8'))
