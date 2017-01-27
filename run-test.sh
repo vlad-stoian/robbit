@@ -3,7 +3,7 @@
 postfacto_token=$(cat secrets.yml | yq -r '.["postfacto-token"]')
 retro_id=$(cat secrets.yml | yq -r '.["retro-id"]')
 slack_token=$(cat secrets.yml | yq -r '.["slack-token"]')
-slack_channel='test-rabbot'
+slack_channel="test-robbit"
 
 echo "${postfacto_token}"
 echo "${retro_id}"
