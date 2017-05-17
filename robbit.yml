@@ -4,6 +4,7 @@ resources:
   source:
     start: 9:40 AM
     stop: 9:45 AM
+    location: Europe/Dublin
     days:
     - Monday
     - Tuesday
