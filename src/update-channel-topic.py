@@ -37,6 +37,7 @@ def get_slack_username_for_pair(name):
         "steve":"sfreeman",
         "alberto":"aleal",
         "abhishek":"achander",
+        "hannes":"hhorl",
     }
     username = pair_board_to_slack_user.get(name, name)
 
