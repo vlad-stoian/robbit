@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 if lpass status; then
-  fly -t lite sp -p slacking-robbit -c robbit.yml --load-vars-from <(lpass show 'Personal/robbit-secrets' --notes)
+  fly -t zumba sp -p rabbitmq-slacking-robbit -c robbit.yml --load-vars-from <(lpass show 'Shared-London Services/rabbitmq/robbit-secrets' --notes)
 fi
