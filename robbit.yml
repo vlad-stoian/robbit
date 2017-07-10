@@ -12,6 +12,19 @@ resources:
     - Thursday
     - Friday
 
+- name: every-evening
+  type: time
+  source:
+    start: 6:00 PM
+    stop: 6:30 PM
+    location: Europe/Dublin
+    days:
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+
 - name: github-code
   type: git
   source:
@@ -65,3 +78,24 @@ jobs:
         - {{slack-token}}
         - {{slack-channel}}
 
+- name: clear-channel-topic
+  plan:
+  - get: every-evening
+    trigger: true
+  - get: github-code
+  - task: annoy
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: python
+          tag: alpine
+      inputs:
+      - name: github-code
+      run:
+        path: python
+        args:
+        - "github-code/src/clear-channel-topic.py"
+        - {{slack-token}}
+        - {{slack-channel}}
