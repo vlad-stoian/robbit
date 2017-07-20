@@ -152,7 +152,6 @@ jobs:
         - -exc
         - |
           mkdir -p ~/.ssh/
-          echo "StrictHostKeyChecking no" > ~/.ssh/config
           ls github-rabbitmq-tile-home-repo/bin/list-envs
           ./github-rabbitmq-tile-home-repo/bin/list-envs claimed > slack-channel-pcf-rabbitmq/message
 
