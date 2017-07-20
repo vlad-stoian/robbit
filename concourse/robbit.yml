@@ -32,7 +32,7 @@ resources:
     - Thursday
     - Friday
 
-- name: slack-alert
+- name: slack-channel-pcf-rabbitmq
   type: slack-notification
   source:
     url: {{slack-hook-url}}
@@ -40,13 +40,21 @@ resources:
 - name: github-robbit-repo
   type: git
   source:
-    uri: https://github.com/vlad-stoian/robbit.git
+    uri: git@github.com:vlad-stoian/robbit.git
     branch: master
+    private_key: {{github-private-key}}
 
 - name: github-rabbitmq-tile-home-repo
   type: git
   source:
-    uri: https://github.com/pivotal-cf/rabbitmq-tile-home
+    uri: git@github.com:pivotal-cf/rabbitmq-tile-home.git
+    branch: master
+    private_key: {{github-private-key}}
+
+- name: github-london-services-locks-repo
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf-experimental/london-services-locks.git
     branch: master
     private_key: {{github-private-key}}
 
@@ -118,3 +126,41 @@ jobs:
         - "github-robbit-repo/src/clear-channel-topic.py"
         - {{slack-token}}
         - {{slack-channel}}
+
+- name: list-claimed-opsman-envs
+  plan:
+  - get: github-rabbitmq-tile-home-repo
+  - get: github-london-services-locks-repo
+  - task: annoy
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: concourse/git-resource
+          tag: latest
+      inputs:
+      - name: github-rabbitmq-tile-home-repo
+      - name: github-london-services-locks-repo
+      outputs:
+      - name: slack-channel-pcf-rabbitmq
+      params:
+        LONDON_SERVICE_LOCKS: github-london-services-locks-repo
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          mkdir -p ~/.ssh/
+          echo "StrictHostKeyChecking no" > ~/.ssh/config
+          ls github-rabbitmq-tile-home-repo/bin/list-envs
+          ./github-rabbitmq-tile-home-repo/bin/list-envs claimed > slack-channel-pcf-rabbitmq/message
+
+          # echo "message in a file" > slack-channel-pcf-rabbitmq/message
+
+  - put: slack-channel-pcf-rabbitmq
+    params:
+      text_file: slack-channel-pcf-rabbitmq/message
+      username: 'robbit'
+      icon_emoji: ':ghost:'
+
