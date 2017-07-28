@@ -24,6 +24,9 @@ if __name__ == "__main__":
 
         commits_touching_path = list(locks_repo.iter_commits(paths=filepath, max_count=1))
 
+        if len(commits_touching_path) < 1:
+            print("No commits for lock {}".format(lock_name))
+
         claim_date = commits_touching_path[0].committed_datetime
         committer_name = commits_touching_path[0].committer.name
         author_name = commits_touching_path[0].author.name
