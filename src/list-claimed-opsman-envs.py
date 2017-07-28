@@ -26,6 +26,7 @@ if __name__ == "__main__":
 
         if len(commits_touching_path) < 1:
             print("No commits for lock {}".format(lock_name))
+            continue
 
         claim_date = commits_touching_path[0].committed_datetime
         committer_name = commits_touching_path[0].committer.name
