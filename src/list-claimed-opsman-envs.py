@@ -57,8 +57,9 @@ if __name__ == "__main__":
         })
 
     print('```')
-    format_string = "{:>25} {:>10} {:>35} {:>22} {:>14}"
+    format_string = "{:>15} {:>10} {:>35} {:>22} {:>14}"
     print(format_string.format("OpsMan Env", "Type", "Claimed by", "Claimed on", "That means"))
+    print("-" * 100)
 
     for lock in sorted(locks, key=lambda lock: lock["date"]):
         print(format_string.format(
