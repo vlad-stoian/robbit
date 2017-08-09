@@ -44,13 +44,6 @@ resources:
     branch: master
     private_key: {{github-private-key}}
 
-- name: github-rabbitmq-tile-home-repo
-  type: git
-  source:
-    uri: git@github.com:pivotal-cf/rabbitmq-tile-home.git
-    branch: master
-    private_key: {{github-private-key}}
-
 - name: github-london-services-locks-repo
   type: git
   source:
@@ -129,7 +122,7 @@ jobs:
 
 - name: list-claimed-opsman-envs
   plan:
-  - get: github-rabbitmq-tile-home-repo
+  - get: github-robbit-repo
   - get: github-london-services-locks-repo
   - task: annoy
     config:
@@ -137,25 +130,21 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: concourse/git-resource
+          repository: python
           tag: latest
       inputs:
-      - name: github-rabbitmq-tile-home-repo
+      - name: github-robbit-repo
       - name: github-london-services-locks-repo
       outputs:
       - name: slack-channel-pcf-rabbitmq
-      params:
-        LONDON_SERVICE_LOCKS: github-london-services-locks-repo
       run:
         path: sh
         args:
         - -exc
         - |
-          mkdir -p ~/.ssh/
-          ls github-rabbitmq-tile-home-repo/bin/list-envs
-          ./github-rabbitmq-tile-home-repo/bin/list-envs claimed > slack-channel-pcf-rabbitmq/message
+          pip install -r github-robbit-repo/requirements.txt
 
-          # echo "message in a file" > slack-channel-pcf-rabbitmq/message
+          python github-robbit-repo/src/list-claimed-opsman-envs.py "$(pwd)/github-london-services-locks-repo/" | tee slack-channel-pcf-rabbitmq/message
 
   - put: slack-channel-pcf-rabbitmq
     params:
