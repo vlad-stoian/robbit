@@ -1,7 +1,10 @@
 import os
+import re
 import sys
 import git
 import glob
+import textwrap
+from datetime import datetime, timezone
 
 DEBUG = False
 
@@ -37,12 +40,34 @@ if __name__ == "__main__":
         if committer_name == author_name:
             claimer = author_name
 
+        if claimer == "CI Pool Resource":
+            claimer = commits_touching_path[0].message.split(' ')[0]
+
+        pattern = re.compile(r'.*\/(?P<type>(.*))\-envs\/.*')
+        match = pattern.search(filepath)
+
+        timediff = datetime.now(timezone.utc) - claim_date
+
         locks.append({
             "name": lock_name ,
             "claimer": claimer,
             "date": claim_date,
+            "ago": "{} days ago".format(timediff.days),
+            "type": match.group('type'),
         })
 
+    print('```')
+    format_string = "{:>25} {:>10} {:>35} {:>22} {:>14}"
+    print(format_string.format("OpsMan Env", "Type", "Claimed by", "Claimed on", "That means"))
+
     for lock in sorted(locks, key=lambda lock: lock["date"]):
-        print("{:>25} {:>35} {:>25}".format(lock["name"], lock["claimer"], lock["date"].strftime("%d %b %Y %H:%M:%S")))
+        print(format_string.format(
+            textwrap.shorten(lock["name"], width=25),
+            textwrap.shorten(lock["type"], width=10),
+            textwrap.shorten(lock["claimer"], width=35),
+            textwrap.shorten(lock["date"].strftime("%d %b %Y %H:%M:%S"), width=22),
+            textwrap.shorten(lock["ago"], width=14),
+        ))
+
+    print('```')
 
