@@ -35,7 +35,7 @@ resources:
 - name: slack-channel-pcf-rabbitmq
   type: slack-notification
   source:
-    url: {{slack-hook-url}}
+    url: {{slack-hook-url-pcf-rabbitmq}}
 
 - name: github-robbit-repo
   type: git
@@ -122,6 +122,8 @@ jobs:
 
 - name: list-claimed-opsman-envs
   plan:
+  - get: every-morning
+    trigger: true
   - get: github-robbit-repo
   - get: github-london-services-locks-repo
   - task: annoy
