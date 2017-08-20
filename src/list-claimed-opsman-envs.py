@@ -57,26 +57,24 @@ if __name__ == "__main__":
             "type": match.group('type'),
         })
 
+    output = []
     output_text = ""
 
     format_string = "{:>15} {:>10} {:>35} {:>22} {:>14}"
-    output_text += format_string.format("OpsMan Env", "Type", "Claimed by", "Claimed on", "That means") + "\r\n"
-    output_text += "-" * 100 + "\r\n"
+    output.append({ "color":"good", "text": format_string.format("OpsMan Env", "Type", "Claimed by", "Claimed on", "That means") })
+    output.append({ "color":"good", "text": "-" * 100})
 
     for lock in sorted(locks, key=lambda lock: lock["date"]):
-        output_text += format_string.format(
+        output.append({
+            "color": "danger",
+            "text": format_string.format(
             textwrap.shorten(lock["name"], width=25),
             textwrap.shorten(lock["type"], width=10),
             textwrap.shorten(lock["claimer"], width=35),
             textwrap.shorten(lock["date"].strftime("%d %b %Y %H:%M:%S"), width=22),
             textwrap.shorten(lock["ago"], width=14),
-        )
-        output_text += "\r\n"
+            )
+        })
 
-    output = [{
-        "color": "danger",
-        "text": output_text,
-    }]
-
-    print(json.dumps(output))
+    print(json.dumps(output, indent=4))
 
