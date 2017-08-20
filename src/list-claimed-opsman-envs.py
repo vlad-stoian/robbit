@@ -78,5 +78,5 @@ if __name__ == "__main__":
         "text": output_text,
     }]
 
-    print(json.dumps(output, indent=4))
+    print(json.dumps(output))
 
