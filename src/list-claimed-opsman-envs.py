@@ -60,8 +60,8 @@ if __name__ == "__main__":
     output_text = ""
 
     format_string = "{:>15} {:>10} {:>35} {:>22} {:>14}"
-    output_text += format_string.format("OpsMan Env", "Type", "Claimed by", "Claimed on", "That means") + "\n"
-    output_text += "-" * 100 + "\n"
+    output_text += format_string.format("OpsMan Env", "Type", "Claimed by", "Claimed on", "That means") + "\r\n"
+    output_text += "-" * 100 + "\r\n"
 
     for lock in sorted(locks, key=lambda lock: lock["date"]):
         output_text += format_string.format(
@@ -71,7 +71,7 @@ if __name__ == "__main__":
             textwrap.shorten(lock["date"].strftime("%d %b %Y %H:%M:%S"), width=22),
             textwrap.shorten(lock["ago"], width=14),
         )
-        output_text += "\n"
+        output_text += "\r\n"
 
     output = [{
         "color": "danger",
