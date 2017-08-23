@@ -3,7 +3,6 @@ import re
 import sys
 import git
 import glob
-import json
 import textwrap
 from datetime import datetime, timezone
 
@@ -12,6 +11,10 @@ DEBUG = False
 def print_debug(what, message):
     if DEBUG:
         print("<debug = {}> -> {}".format(what, message))
+
+def chunks(l, size):
+    for i in range(0, len(l), size):
+        yield l[i:i + size]
 
 
 if __name__ == "__main__":
@@ -57,24 +60,24 @@ if __name__ == "__main__":
             "type": match.group('type'),
         })
 
-    output = []
-    output_text = ""
-
     format_string = "{:>15} {:>10} {:>35} {:>22} {:>14}"
-    output.append({ "color":"good", "text": format_string.format("OpsMan Env", "Type", "Claimed by", "Claimed on", "That means") })
-    output.append({ "color":"good", "text": "-" * 100})
 
+    head = format_string.format("OpsMan Env", "Type", "Claimed by", "Claimed on", "That means")
+    head += "\n"
+    head += "-" * 100
+    head += "\n"
+
+    envs_list = []
     for lock in sorted(locks, key=lambda lock: lock["date"]):
-        output.append({
-            "color": "danger",
-            "text": format_string.format(
+        envs_list.append(format_string.format(
             textwrap.shorten(lock["name"], width=25),
             textwrap.shorten(lock["type"], width=10),
             textwrap.shorten(lock["claimer"], width=35),
             textwrap.shorten(lock["date"].strftime("%d %b %Y %H:%M:%S"), width=22),
             textwrap.shorten(lock["ago"], width=14),
-            )
-        })
+        ))
 
-    print(json.dumps(output, indent=4))
-
+    for chunk in chunks(envs_list, 35):
+        joined_envs = "\n".join(chunk)
+        message = "```\n{}\n{}\n```".format(head, joined_envs)
+        print(message)
