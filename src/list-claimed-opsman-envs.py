@@ -5,6 +5,7 @@ import git
 import glob
 import textwrap
 from datetime import datetime, timezone
+from texttable import Texttable
 
 DEBUG = False
 
@@ -60,24 +61,29 @@ if __name__ == "__main__":
             "type": match.group('type'),
         })
 
-    format_string = "{:>15} {:>10} {:>35} {:>22} {:>14}"
 
-    head = format_string.format("OpsMan Env", "Type", "Claimed by", "Claimed on", "That means")
-    head += "\n"
-    head += "-" * 100
-    head += "\n"
+    table_header = ["OpsMan Env", "Type", "Claimed by", "Claimed on", "That means"]
 
     envs_list = []
     for lock in sorted(locks, key=lambda lock: lock["date"]):
-        envs_list.append(format_string.format(
+        envs_list.append([
             textwrap.shorten(lock["name"], width=25),
             textwrap.shorten(lock["type"], width=10),
             textwrap.shorten(lock["claimer"], width=35),
             textwrap.shorten(lock["date"].strftime("%d %b %Y %H:%M:%S"), width=22),
             textwrap.shorten(lock["ago"], width=14),
-        ))
+        ])
 
     for chunk in chunks(envs_list, 35):
-        joined_envs = "\n".join(chunk)
-        message = "```\n{}\n{}\n```".format(head, joined_envs)
-        print(message)
+        table = Texttable()
+        table.set_cols_align(["r", "l", "r", "r", "r"])
+        table.set_cols_valign(["c", "c", "c", "c", "c"])
+        table.set_cols_dtype(['t','t','t','t','t'])
+        table.set_cols_width([15, 10, 35, 22, 14])
+        table.set_deco(Texttable.HEADER)
+
+        table.header(table_header)
+        table.add_rows(chunk, header=False)
+
+        drawn_table = table.draw()
+        print("```\n{}\n```\n".format(drawn_table))
