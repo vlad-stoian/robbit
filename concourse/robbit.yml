@@ -35,7 +35,7 @@ resources:
 - name: slack-channel-pcf-rabbitmq
   type: slack-notification
   source:
-    url: {{slack-hook-url-pcf-rabbitmq}}
+    url: {{slack-hook-url-pcf-rabbitmq-eng}}
 
 - name: github-robbit-repo
   type: git
@@ -74,7 +74,7 @@ jobs:
         - {{postfacto-token}}
         - {{retro-id}}
         - {{slack-token}}
-        - {{slack-channel}}
+        - {{slack-channel-id-pcf-rabbitmq-eng}}
 
 - name: update-channel-topic
   plan:
@@ -96,7 +96,7 @@ jobs:
         args:
         - "github-robbit-repo/src/update-channel-topic.py"
         - {{slack-token}}
-        - {{slack-channel}}
+        - {{slack-channel-id-pcf-rabbitmq}}
 
 - name: clear-channel-topic
   plan:
@@ -118,7 +118,7 @@ jobs:
         args:
         - "github-robbit-repo/src/clear-channel-topic.py"
         - {{slack-token}}
-        - {{slack-channel}}
+        - {{slack-channel-id-pcf-rabbitmq}}
 
 - name: list-claimed-opsman-envs
   plan:
