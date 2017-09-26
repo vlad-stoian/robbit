@@ -86,4 +86,4 @@ if __name__ == "__main__":
         table.add_rows(chunk, header=False)
 
         drawn_table = table.draw()
-        print("```\n{}\n```\n---\n".format(drawn_table))
+        print("```\n{}\n```\n---\n---\n".format(drawn_table))
