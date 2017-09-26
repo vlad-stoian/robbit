@@ -74,7 +74,7 @@ if __name__ == "__main__":
             textwrap.shorten(lock["ago"], width=14),
         ])
 
-    for chunk in chunks(envs_list, 34):
+    for chunk in chunks(envs_list, 35):
         table = Texttable()
         table.set_cols_align(["r", "l", "r", "r", "r"])
         table.set_cols_valign(["c", "c", "c", "c", "c"])
