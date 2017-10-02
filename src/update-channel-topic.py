@@ -40,6 +40,7 @@ def get_slack_username_for_pair(name):
         "hannes":"hhorl",
         "andrew":"andrew.thorburn",
         "stev": "st3v",
+        "mark": "mhender",
     }
     username = pair_board_to_slack_user.get(name, name)
 
