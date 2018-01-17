@@ -32,7 +32,7 @@ def get_in_progress_retro_items():
         'content-type': 'application/json',
         'Accept': "*/*",
     }
-    url = 'https://retro-api.cfapps.io/retros/' + retro_id
+    url = 'https://retros-iad-api.cfapps.io/retros/' + retro_id
     request = urllib.request.Request(url, headers=headers)
     response = urllib.request.urlopen(request)
 
