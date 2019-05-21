@@ -58,7 +58,7 @@ if __name__ == "__main__":
     retro_items = get_in_progress_retro_items()
 
     #TODO: Maybe add personal @user to annoy everyone
-    good_morning_message = ["*Good morning, fellow rabbits*:rabbit2:",]
+    good_morning_message = ["*Good morning, fellow telemetrons*:robotron:",]
     retro_items_message = ["(%s) Retro items:" % len(retro_items), "```"] + retro_items + ["```"]
     retro_items_message = good_morning_message + retro_items_message
 
