@@ -11,43 +11,18 @@ resources:
   source:
     start: 9:40 AM
     stop: 9:45 AM
-    location: Europe/Dublin
+    location: America/Los_Angeles
     days:
     - Monday
     - Tuesday
     - Wednesday
     - Thursday
     - Friday
-
-- name: every-evening
-  type: time
-  source:
-    start: 6:00 PM
-    stop: 6:30 PM
-    location: Europe/Dublin
-    days:
-    - Monday
-    - Tuesday
-    - Wednesday
-    - Thursday
-    - Friday
-
-- name: slack-channel-pcf-rabbitmq
-  type: slack-notification
-  source:
-    url: {{slack-hook-url-test-robbit}}
 
 - name: github-robbit-repo
   type: git
   source:
-    uri: git@github.com:vlad-stoian/robbit.git
-    branch: master
-    private_key: {{github-private-key}}
-
-- name: github-london-services-locks-repo
-  type: git
-  source:
-    uri: git@github.com:pivotal-cf-experimental/london-services-locks.git
+    uri: git@github.com:fyang-pivotal/robbit.git
     branch: master
     private_key: {{github-private-key}}
 
@@ -74,107 +49,5 @@ jobs:
         - {{product-postfacto-token}}
         - {{product-retro-id}}
         - {{slack-token}}
-        - {{slack-channel-id-pcf-rabbitmq-eng}}
-
-- name: post-tech-retro-items
-  plan:
-  - get: every-morning
-    trigger: true
-  - get: github-robbit-repo
-  - task: annoy
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: python
-          tag: alpine
-      inputs:
-      - name: github-robbit-repo
-      run:
-        path: python
-        args:
-        - "github-robbit-repo/src/post-retro-items.py"
-        - {{tech-postfacto-token}}
-        - {{tech-retro-id}}
-        - {{slack-token}}
-        - {{slack-channel-id-pcf-rabbitmq-eng}}
-
-- name: update-channel-topic
-  plan:
-  - get: every-morning
-    trigger: true
-  - get: github-robbit-repo
-  - task: annoy
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: python
-          tag: alpine
-      inputs:
-      - name: github-robbit-repo
-      run:
-        path: python
-        args:
-        - "github-robbit-repo/src/update-channel-topic.py"
-        - {{slack-token}}
-        - {{slack-channel-id-pcf-rabbitmq}}
-
-- name: clear-channel-topic
-  plan:
-  - get: every-evening
-    trigger: true
-  - get: github-robbit-repo
-  - task: annoy
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: python
-          tag: alpine
-      inputs:
-      - name: github-robbit-repo
-      run:
-        path: python
-        args:
-        - "github-robbit-repo/src/clear-channel-topic.py"
-        - {{slack-token}}
-        - {{slack-channel-id-pcf-rabbitmq}}
-
-- name: list-claimed-opsman-envs
-  plan:
-  - get: every-morning
-    trigger: true
-  - get: github-robbit-repo
-  - get: github-london-services-locks-repo
-  - task: annoy
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: python
-          tag: latest
-      inputs:
-      - name: github-robbit-repo
-      - name: github-london-services-locks-repo
-      outputs:
-      - name: slack-channel-pcf-rabbitmq
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          pip install -r github-robbit-repo/requirements.txt
-
-          python github-robbit-repo/src/list-claimed-opsman-envs.py "$(pwd)/github-london-services-locks-repo/" | tee slack-channel-pcf-rabbitmq/message
-
-  - put: slack-channel-pcf-rabbitmq
-    params:
-      text_file: slack-channel-pcf-rabbitmq/message
-      username: 'robbit'
-      icon_emoji: ':ghost:'
+        - {{slack-channel-id-pks-telemetry-eng}}
 
